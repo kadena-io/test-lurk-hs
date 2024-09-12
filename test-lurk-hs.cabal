@@ -1,0 +1,43 @@
+cabal-version: 3.0
+name: test-lurk-hs
+version: 0.1.0.0
+synopsis: Tests and acceptance criteria for https://github.com/argumentcomputer/lurk-hs
+license: BSD-3-Clause
+license-file: LICENSE
+author: rsoeldner
+maintainer: r.soeldner@gmail.com
+copyright: Copyright (C) 2024 Kadena LLC
+build-type: Simple
+
+extra-doc-files:
+  CHANGELOG.md
+  README.md
+
+extra-source-files:
+
+data-files:
+  assets/*.json
+
+common warnings
+ ghc-options: -Wall
+
+executable example-lurk-hs
+  import: warnings
+  main-is: Main.hs
+  build-depends:
+    , base
+    , plonk-verify
+  hs-source-dirs: app
+  default-language: Haskell2010
+
+test-suite lurk-hs-tests
+  import: warnings
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  hs-source-dirs: test
+  main-is: Main.hs
+  build-depends:
+    , plonk-verify
+    , aeson >=2.2
+    , base
+    , hspec >=2.11
