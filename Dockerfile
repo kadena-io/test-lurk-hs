@@ -69,6 +69,8 @@ WORKDIR /test-lurk-hs
 # RUN cargo nextest run --release --no-fail-fast
 
 # build Haskell package
-RUN cabal build --enable-tests
+RUN cabal update
+RUN cabal build --enable-tests --dependencies-only
+RUN cabal build
 RUN cabal test
 
