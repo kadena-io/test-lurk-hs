@@ -10,4 +10,4 @@ packages: test-lurk-hs.cabal
 source-repository-package
     type: git
     location: https://github.com/larskuhtz/lurk-hs.git
-    tag: 1f1dd579efc9082211bdea4decc3218f8dd1441b
+    tag: 757b5ec98617c3a1750efdaa394fb3e4b4514415
