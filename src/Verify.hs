@@ -21,7 +21,8 @@
 -- Stability: experimental
 --
 module Verify
-( supportedMachineVersions
+( verifierName
+, supportedMachineVersions
 , defaultMachineVersion
 , runExample
 , ProofClaim(..)
@@ -51,6 +52,9 @@ import PlonkVerify
 import Utils
 
 -- -------------------------------------------------------------------------- --
+
+verifierName :: String
+verifierName = "PLONK_BN254"
 
 defaultMachineVersion :: String
 defaultMachineVersion = "v1.0.8-testnet"
