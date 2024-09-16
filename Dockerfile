@@ -17,6 +17,7 @@ RUN <<EOF
     neovim \
     curl \
     build-essential \
+    libclang-dev \
     libffi-dev \
     libffi8 \
     libgmp-dev \
@@ -60,17 +61,18 @@ RUN <<EOF
   rustc --version
 EOF
 
-RUN git clone https://github.com/kadena-io/test-lurk-hs.git
+RUN cabal update
 
 WORKDIR /test-lurk-hs
+COPY . .
 
 # build Rust library
 # RUN cargo build --release
 # RUN cargo nextest run --release --no-fail-fast
 
 # build Haskell package
-RUN cabal update
 RUN cabal build --enable-tests --dependencies-only
 RUN cabal build
 RUN cabal test
+RUN cabal run
 

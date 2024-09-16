@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE LambdaCase #-}
+
 -- |
 -- Module: Main
 -- Copyright: Copyright © 2024 Kadena LLC.
@@ -11,15 +12,15 @@ module Main
 ( main
 ) where
 
-import Data.Aeson
-
-import Foreign.C.String
-
 import Test.Hspec
+
+-- plonk verifier
+
+import PlonkVerify
 
 -- internal modules
 
-import PlonkVerify
+import Verify hiding (runExample)
 
 -- -------------------------------------------------------------------------- --
 -- main
@@ -36,40 +37,22 @@ main = hspec $ describe "examples" $ do
 testExample :: String -> SpecWith ()
 testExample name = it name $ do
     r <- runExample name
-    shouldNotBe r 0
+    shouldBe r True
 
-runExample :: String -> IO Int
+-- Test the case when 'verifyPlonkBn254' is imported directly by the component.
+--
+runExample :: String -> IO Bool
 runExample name = do
     p <- readProof name
-    dataDir <- newCString "./verifier-assets/v1.0.8-testnet"
-    proof <- newCString (_proofProof p)
-    vkeyHash <- newCString (_proofVKey p)
-    committedValuesDigest <- newCString (_proofPublicValues p)
-
-    fromIntegral <$> verify_plonk_bn254
-        dataDir
-        proof
-        vkeyHash
-        committedValuesDigest
-
--- -------------------------------------------------------------------------- --
--- Utils
-
-data Proof = Proof
-    { _proofVKey :: !String
-    , _proofPublicValues :: !String
-    , _proofProof :: !String
-    }
-
-instance FromJSON Proof where
-    parseJSON = withObject "Proof" $ \o -> Proof
-        <$> o .: "vkey"
-        <*> o .: "publicValues"
-        <*> o .: "proof"
-
-readProof :: String -> IO Proof
-readProof name = eitherDecodeFileStrict' ("./assets/" <> name <> ".json") >>= \case
-    Left e -> fail $ "failed to load proof " <> name <> ": " <> e
-    Right p -> return p
-
-
+    case lookup (_claimMachineVersion p) supportedMachineVersions of
+        Just v -> do
+            case _claimParameters p of
+                Left pp -> verifyPlonkBn254' v
+                    (_claimProof p)
+                    (_claimProgramId p)
+                    pp
+                Right pp -> verifyPlonkBn254 v
+                    (_claimProof p)
+                    (_claimProgramId p)
+                    pp
+        Nothing -> error $ "unsupported machine version: " <> (_claimMachineVersion p)
