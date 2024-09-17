@@ -66,7 +66,6 @@ supportedMachineVersions = $$(embedVKeys "vk" "verifier-assets")
 -- Orphans
 
 deriving via HexEncoded instance FromJSON Proof
--- deriving via (HexEncodedFixed 32) instance FromJSON ProgramId
 deriving via HexEncoded instance FromJSON ProgramId
 deriving via HexEncoded instance FromJSON PublicParameter
 
@@ -84,11 +83,11 @@ data ProofClaim = ProofClaim
         -- only in the context of a particular verifying key. Each program has a
         -- well defined set of public parameters.
 
-    , _claimParameters :: !(Either PublicParameterHash [PublicParameter])
+    , _claimParameters :: !(Either PublicParameterHash PublicParameter)
         -- ^ The public parameters of the respective program. For verification
-        -- the parameters are encoded and hashes.
+        -- the parameters are encoded and hashed.
         --
-        -- In the context of this test suite a the length of used as heuristics
+        -- In the context of this test suite a the length is used as heuristics
         -- for whether the value is a digest or a list.
 
     , _claimProof :: !Proof
