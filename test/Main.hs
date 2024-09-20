@@ -16,7 +16,7 @@ import Test.Hspec
 
 -- plonk verifier
 
-import PlonkVerify
+import PlonkBn254.Verify
 
 -- internal modules
 
@@ -47,11 +47,11 @@ runExample name = do
     case lookup (_claimMachineVersion p) supportedMachineVersions of
         Just v -> do
             case _claimParameters p of
-                Left pp -> verifyPlonkBn254' v
+                Left pp -> verifyPrehashed v
                     (_claimProof p)
                     (_claimProgramId p)
                     pp
-                Right pp -> verifyPlonkBn254 v
+                Right pp -> verify v
                     (_claimProof p)
                     (_claimProgramId p)
                     pp

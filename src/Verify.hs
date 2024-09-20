@@ -44,8 +44,8 @@ import Lens.Micro.TH
 
 -- Plonk
 
-import EmbedVKeys
-import PlonkVerify
+import PlonkBn254.Utils.EmbedVMKeys
+import PlonkBn254.Verify
 
 -- internal modules
 
@@ -59,8 +59,8 @@ verifierName = "PLONK_BN254"
 defaultMachineVersion :: String
 defaultMachineVersion = "v1.0.8-testnet"
 
-supportedMachineVersions :: [(FilePath, VKey)]
-supportedMachineVersions = $$(embedVKeys "vk" "verifier-assets")
+supportedMachineVersions :: [(String, VMKey)]
+supportedMachineVersions = $$(embedVMKeys "vk" "verifier-assets")
 
 -- -------------------------------------------------------------------------- --
 -- Orphans
@@ -128,11 +128,11 @@ runExample name = do
     case lookup (_claimMachineVersion p) supportedMachineVersions of
         Just v -> do
             case _claimParameters p of
-                Left pp -> verifyPlonkBn254' v
+                Left pp -> verifyPrehashed v
                     (_claimProof p)
                     (_claimProgramId p)
                     pp
-                Right pp -> verifyPlonkBn254 v
+                Right pp -> verify v
                     (_claimProof p)
                     (_claimProgramId p)
                     pp
