@@ -42,15 +42,19 @@ makeLenses ''Proof
 
 main :: IO ()
 main = hspec $ describe "examples" $ do
-    testExample "fibonacci_fixture"
-    testExample "epoch_change"
-    testExample "inclusion_fixture"
+    testSuccess "fibonacci_fixture"
+    testSuccess "epoch_change"
+    testSuccess "inclusion_fixture"
+    testFailure "empty"
+  where
+    testSuccess n = testExample n True
+    testFailure n = testExample n False
 
 -- --------------------------------------------------------------------------
 -- Run Example
 
-testExample :: String -> SpecWith ()
-testExample name = it name $ do
+testExample :: String -> Bool -> SpecWith ()
+testExample name expected = it name $ do
     r <- runExample name
-    shouldBe r True
+    shouldBe r expected
 
