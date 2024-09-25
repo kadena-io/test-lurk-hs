@@ -7,4 +7,4 @@ source-repository-package
     type: git
     -- location: https://github.com/argumentcomputer/lurk-hs.git
     location: https://github.com/larskuhtz/lurk-hs.git
-    tag: 11d8de4af1aafd289c313ad3f661e42b6eb6f8d9
+    tag: 66970e9c041e340c1ef4dba06ede403efaf23503
