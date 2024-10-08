@@ -6,4 +6,4 @@ package test-lurk-hs
 source-repository-package
     type: git
     location: https://github.com/argumentcomputer/lurk-hs.git
-    tag: e81d36a3118b4f03bc478741532c347b5da2e099
+    tag: 77bdf6f4d289d8274f839822d590d05758bfb53d
